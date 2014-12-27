@@ -4,21 +4,20 @@ FILE *fp;
 
 struct appointment
 {
-	char name[30];
 	char time[6];
+	char name[30];
 	char place[25];
 	char note[500];
 };
 
 void mainMenu();
-void writeInstance(char *,char *,char *);
 void writeAppo();
 void viewAppo();
 void eraseAppo();
 
 int main()
 {
-	int choice = 2; // given a value between 1 and 4 so program doesn't show error on first run
+	int choice = 2; // given a value because of error output
 
 	while (1)
 	{
@@ -33,16 +32,14 @@ int main()
 		
 		switch (choice)
 		{
-			case 1:		viewAppo();	break;
+			case 1:		viewAppo();		break;
 			case 2:		writeAppo();	break;
 			case 3:		eraseAppo();	break;
-			case 4:		return 0;	break;
+			case 4:		return 0;		break;
 			default:	system("cls");	break;
 		}
 	}
 }
-
-
 
 
 void mainMenu()
@@ -57,14 +54,6 @@ void mainMenu()
 	printf("\t| 4: Exit                   |\n");
 	printf("\t ---------------------------\n\n");
 }
-void writeInstance(char *autoInput, char *question, const char *userInput)
-{
-	fflush(stdin);
-	fprintf(fp, "%s", autoInput);
-	printf("%s", question);
-	fgets(userInput, 500, stdin);
-	fprintf(fp, "%s", userInput);
-}
 void writeAppo()
 {
 	// u txt fajlu novi red nakon slova, isti red nakon broja _problem
@@ -72,11 +61,33 @@ void writeAppo()
 	system("cls");
 	struct appointment appo;
 	fp = fopen("C:/Users/Ferhat/Documents/Visual Studio 2013/Projects/Special/PersonalDiaryManagement/appointments/appointments.txt", "a");
-	writeInstance("Meeting with: ", "\n\n\tWho do you have a meeting with ? ", appo.name);
-	writeInstance("At: ", "\tWhat time? ", appo.time);
-	writeInstance("In: ", "\tWhere? ", appo.place);
-	writeInstance("Additional notes : ", "\tAny additional notes ? ", appo.note);
+
+	fflush(stdin);
+	fprintf(fp, "Meeting with: ");
+	printf("\n\n\tWho do you have a meeting with? ");
+	fgets(appo.name, sizeof appo.name, stdin);
+	fprintf(fp, "%s", appo.name);
+	
+	fflush(stdin);
+	fprintf(fp, "At: ");
+	printf("\tWhat time? ");
+	fgets(appo.time, sizeof appo.time, stdin);
+	fprintf(fp, "%s", appo.time);
+
+	fflush(stdin);
+	fprintf(fp, "\nIn: ");
+	printf("\tWhere? ");
+	fgets(appo.place, sizeof appo.place, stdin);
+	fprintf(fp, "%s", appo.place);
+
+	fflush(stdin);
+	fprintf(fp, "Additional notes: ");
+	printf("\tAny additional notes? ");
+	fgets(appo.note, sizeof appo.note, stdin);
+	fprintf(fp, "%s", appo.note);
+
 	fprintf(fp, "\n");
+
 	fclose(fp);
 
 	printf("\n\t");
@@ -86,14 +97,17 @@ void writeAppo()
 void viewAppo()
 {
 	system("cls");
-	int c;
+	char *contents;
 	fp = fopen("C:/Users/Ferhat/Documents/Visual Studio 2013/Projects/Special/PersonalDiaryManagement/appointments/appointments.txt", "r");
-	// Algorithm to read a character from the txt file, and print it right after reading
-	if (fp) {
-		while ((c = getc(fp)) != EOF)
-			putchar(c);
-		fclose(fp);
-	}
+	fseek(fp, 0L, SEEK_END);
+	long fileSize = ftell(fp);
+	fseek(fp, 0L, SEEK_SET);
+	contents = malloc(fileSize + 1);
+	long size = fread(contents, 1, fileSize, fp);
+	contents[size] = 0;
+	printf("\n\n%s\n", contents);
+	fclose(fp);
+
 	system("Pause");
 	system("cls");
 }
