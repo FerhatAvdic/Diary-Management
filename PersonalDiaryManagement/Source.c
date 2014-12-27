@@ -33,10 +33,10 @@ int main()
 		
 		switch (choice)
 		{
-			case 1:		viewAppo();		break;
+			case 1:		viewAppo();	break;
 			case 2:		writeAppo();	break;
 			case 3:		eraseAppo();	break;
-			case 4:		return 0;		break;
+			case 4:		return 0;	break;
 			default:	system("cls");	break;
 		}
 	}
